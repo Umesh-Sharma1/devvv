@@ -3,18 +3,25 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'echo "Building the code"'
+        sh 'git clone <repository-url>'
+        sh 'mvn clean compile'
       }
     }
     stage('Test') {
       steps {
-        sh 'echo "Running the tests"'
+        sh 'mvn test'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'echo "Deploying the code"'
+        sh 'ssh user@server "cd /path/to/deploy && git pull && mvn clean install"'
       }
+    }
+  }
+  post {
+    failure {
+      echo 'One of the stages failed!'
+      mail to: 'team@example.com', subject: 'Pipeline Failed'
     }
   }
 }
