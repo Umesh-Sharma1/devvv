@@ -28,6 +28,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                
                 sh 'ssh user@server "docker-compose up -d"'
             }
         }
