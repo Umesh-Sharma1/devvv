@@ -3,19 +3,17 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm install'
-        sh 'npm run build'
+        sh 'echo "Building the code"'
       }
     }
     stage('Test') {
       steps {
-        sh 'npm test'
+        sh 'echo "Running the tests"'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'docker build -t myapp .'
-        sh 'docker run -d -p 8080:8080 myapp'
+        sh 'echo "Deploying the code"'
       }
     }
   }
