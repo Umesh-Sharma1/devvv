@@ -16,7 +16,9 @@ pipeline {
         }
         stage('Lint') {
             steps {
-                sh 'npx eslint .'
+                withEnv(['PATH+NODE=/usr/local/bin']) {
+                    sh 'npx eslint .'
+                }
             }
         }
         stage('Deploy') {
