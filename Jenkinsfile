@@ -6,17 +6,23 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        bat 'gradle.bat build'
+        withEnv(['JAVA_HOME=C:\Program Files\Java\jdk-17']) {
+          sh 'gradlew.bat build'
+        }
       }
     }
     stage('Test') {
       steps {
-        bat 'gradle.bat test'
+        withEnv(['JAVA_HOME=C:\Program Files\Java\jdk-17']) {
+          sh 'gradlew.bat test'
+        }
       }
     }
     stage('Deploy') {
       steps {
-        bat 'gradle.bat deploy'
+        withEnv(['JAVA_HOME=C:\Program Files\Java\jdk-17']) {
+          sh 'gradlew.bat deploy'
+        }
       }
     }   
   }
