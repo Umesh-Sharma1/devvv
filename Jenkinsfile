@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  tools {
+    nodejs "node"
+  }
   stages {
     stage('Build') {
       steps {
@@ -13,7 +16,7 @@ pipeline {
     }
     stage('Lint') {
       steps {
-        bat 'C:\\Users\\lenovo\\AppData\\Roaming\\npm\\npx.cmd eslint .'
+        bat 'npx.cmd eslint .'
       }
     }
     stage('Deploy') {
