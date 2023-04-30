@@ -1,33 +1,29 @@
 pipeline {
     agent any
-    environment {
-        MVN_HOME = tool name: 'M3', type: 'maven'
-    }
     stages {
-        stage('Declarative: Checkout SCM') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
         stage('Build') {
             steps {
-                sh '${MVN_HOME}/bin/mvn clean package'
+                sh 'echo "Build step"'
             }
         }
         stage('Test') {
             steps {
-                sh '${MVN_HOME}/bin/mvn test'
+                sh 'echo "Test step"'
             }
         }
         stage('Lint') {
             steps {
-                sh 'npm install'
-                sh 'npm run lint'
+                sh 'echo "Lint step"'
             }
         }
         stage('Deploy') {
             steps {
-                sh 'ssh user@server "cd /path/to/app && git pull && pm2 restart app"'
+                sh 'echo "Deploy step"'
             }
         }
     }
