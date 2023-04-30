@@ -16,7 +16,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
                 scannerHome = tool 'SonarQube'
             }
             steps {
-                sh "${scannerHome}/bin/sonar-scanner"
+                bat "${scannerHome}/bin/sonar-scanner"
             }
         }
     }
