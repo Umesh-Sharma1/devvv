@@ -3,22 +3,22 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'echo "Building the code"'
+        bat 'echo "Building the code"'
       }
     }
     stage('Test') {
       steps {
-        sh 'echo "Running the tests"'
+        bat 'echo "Running the tests"'
       }
     }
     stage('Lint') {
       steps {
-        sh 'npx eslint .'
+        bat 'npx eslint .'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'echo "Deploying the code"'
+        bat 'echo "Deploying the code"'
       }
     }
   }
