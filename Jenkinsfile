@@ -1,28 +1,28 @@
 pipeline {
-  agent any
-  tools {
-    nodejs "node"
-  }
-  stages {
-    stage('Build') {
-      steps {
-        bat 'echo "Building the code"'
-      }
+    agent any
+    tools {
+        nodejs "Node.js v14.17.0"
     }
-    stage('Test') {
-      steps {
-        bat 'echo "Running the tests"'
-      }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'echo "Building the code"'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'echo "Running the tests"'
+            }
+        }
+        stage('Lint') {
+            steps {
+                sh 'npx eslint .'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'echo "Deploying the code"'
+            }
+        }
     }
-    stage('Lint') {
-      steps {
-        bat 'npx.cmd eslint .'
-      }
-    }
-    stage('Deploy') {
-      steps {
-        bat 'echo "Deploying the code"'
-      }
-    }
-  }
 }
