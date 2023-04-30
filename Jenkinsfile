@@ -1,20 +1,38 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      steps {
-        bat 'echo "Building the code"'
-      }
+    agent any
+
+    tools {
+        maven 'Maven'
+        jdk 'Java'
+        sonarqube 'SonarQube'
     }
-    stage('Test') {
-      steps {
-        bat 'echo "Running the tests"'
-      }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'SonarQube'
+            }
+            steps {
+                sh "${scannerHome}/bin/sonar-scanner"
+            }
+        }
     }
-    stage('Deploy') {
-      steps {
-        bat 'echo "Deploying the code"'
-      }
-    }
-  }
+
+    post {
+        always {
+            junit 'target/surefire-reports/**/*.xml'
+        }
+    }
 }
