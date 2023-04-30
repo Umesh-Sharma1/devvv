@@ -1,28 +1,33 @@
 pipeline {
     agent any
-    tools {
-        nodejs "Node.js v14.17.0"
+    environment {
+        MVN_HOME = tool name: 'M3', type: 'maven'
     }
     stages {
+        stage('Declarative: Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
-                sh 'echo "Building the code"'
+                sh '${MVN_HOME}/bin/mvn clean package'
             }
         }
         stage('Test') {
             steps {
-                sh 'echo "Running the tests"'
+                sh '${MVN_HOME}/bin/mvn test'
             }
         }
         stage('Lint') {
             steps {
-                sh 'npm install' // Install dependencies
-                sh 'npx eslint .'
+                sh 'npm install'
+                sh 'npm run lint'
             }
         }
         stage('Deploy') {
             steps {
-                sh 'echo "Deploying the code"'
+                sh 'ssh user@server "cd /path/to/app && git pull && pm2 restart app"'
             }
         }
     }
