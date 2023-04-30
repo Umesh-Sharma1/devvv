@@ -1,20 +1,32 @@
 pipeline {
   agent any
+  tools {
+    nodejs "node"
+  }
   stages {
     stage('Build') {
       steps {
-        bat 'echo "Building the code"'
+        sh 'echo "Building the code"'
       }
     }
     stage('Test') {
       steps {
-        bat 'echo "Running the tests"'
+        sh 'echo "Running ESLint"'
+        sh 'npm install eslint --save-dev'
+        sh 'eslint --ext .js,.jsx src/'
+        recordIssues tool: warningsNg(), 
+          aggregatingResults: true, 
+          forensicsLimit: 50, 
+          healthy: '', 
+          unHealthy: '', 
+          sourceCodeEncoding: 'UTF-8'
       }
     }
     stage('Deploy') {
       steps {
-        bat 'echo "Deploying the code"'
+        sh 'echo "Deploying the code"'
       }
     }
   }
 }
+
