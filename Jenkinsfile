@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Lint') {
       steps {
-        sh 'C:\\Users\\lenovo\\AppData\\Roaming\\npm\\npx.cmd eslint .'
+        bat 'C:\\Users\\lenovo\\AppData\\Roaming\\npm\\npx.cmd eslint .'
       }
     }
     stage('Deploy') {
