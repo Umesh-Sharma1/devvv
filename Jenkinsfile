@@ -1,38 +1,20 @@
-pipeline {
-    agent any
-
-    tools {
-        maven 'Maven'
-        jdk 'Java'
-        sonarqube 'SonarQube'
+ppipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        bat 'echo "Building the code"'
+      }
     }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Build') {
-            steps {
-                bat 'mvn clean install'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'SonarQube'
-            }
-            steps {
-                bat "${scannerHome}/bin/sonar-scanner"
-            }
-        }
+    stage('Test') {
+      steps {
+        bat 'echo "Running the tests"'
+      }
     }
-
-    post {
-        always {
-            junit 'target/surefire-reports/**/*.xml'
-        }
+    stage('Deploy') {
+      steps {
+        bat 'echo "Deploying the code"'
+      }
     }
+  }
 }
