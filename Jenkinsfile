@@ -1,8 +1,5 @@
 pipeline {
   agent any
-  tools {
-    nodejs "node"
-  }
   stages {
     stage('Build') {
       steps {
@@ -11,15 +8,12 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'echo "Running ESLint"'
-        sh 'npm install eslint --save-dev'
-        sh 'eslint --ext .js,.jsx src/'
-        recordIssues tool: warningsNg(), 
-          aggregatingResults: true, 
-          forensicsLimit: 50, 
-          healthy: '', 
-          unHealthy: '', 
-          sourceCodeEncoding: 'UTF-8'
+        sh 'echo "Running the tests"'
+      }
+    }
+    stage('Lint') {
+      steps {
+        sh 'npx eslint .'
       }
     }
     stage('Deploy') {
@@ -29,4 +23,3 @@ pipeline {
     }
   }
 }
-
