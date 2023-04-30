@@ -1,32 +1,44 @@
-pipeline {
-  agent any
-  stages {
+node(){
+    stage('Cloning Git') {
+        checkout scm
+    }
+        
+    stage('Install dependencies') {
+        nodejs('nodejs') {
+            sh 'npm install'
+            echo "Modules installed"
+        }
+        
+    }
     stage('Build') {
-      steps {
-        bat 'echo "Building the code"'
-      }
+        nodejs('nodejs') {
+            sh 'npm run build'
+            echo "Build completed"
+        }
+        
     }
-    stage('Test') {
-      steps {
-        bat 'echo "Running the tests"'
-      }
+
+    stage('Package Build') {
+        sh "tar -zcvf bundle.tar.gz dist/angular-ecommerce/"
     }
-    stage('Deploy') {
-     steps {
-        // Download and install 7-zip
-        bat 'curl -L https://www.7-zip.org/a/7z1900-x64.exe -o 7z.exe'
-        bat '7z.exe x terraform_1.0.11_windows_amd64.zip -o"$env:ProgramFiles\\terraform"'
-        bat 'setx path "$env:path;C:/Program Files/terraform" /M'
 
-        // Initialize Terraform configuration
-        bat 'terraform init'
-
-        // Plan Terraform deployment
-        bat 'terraform plan -out=plan.tfplan'
-
-        // Apply Terraform deployment
-        bat 'terraform apply -auto-approve plan.tfplan'
-     }
+    stage('Artifacts Creation') {
+        fingerprint 'bundle.tar.gz'
+        archiveArtifacts 'bundle.tar.gz'
+        echo "Artifacts created"
     }
-  }
+
+    stage('Stash changes') {
+        stash allowEmpty: true, includes: 'bundle.tar.gz', name: 'buildArtifacts'
+    }
+}
+
+node('awsnode') {
+    echo 'Unstash'
+    unstash 'buildArtifacts'
+    echo 'Artifacts copied'
+
+    echo 'Copy'
+    sh "yes | sudo cp -R bundle.tar.gz /var/www/html && cd /var/www/html && sudo tar -xvf bundle.tar.gz"
+    echo 'Copy completed'
 }
